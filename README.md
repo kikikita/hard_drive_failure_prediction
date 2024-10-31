@@ -1,19 +1,19 @@
 # README
 
-## Overview
+## Обзор
 
-The **Disk and Server Performance Metrics Collection Script** is a comprehensive tool designed to monitor and analyze both disk and server performance metrics in real-time. This script not only collects key performance indicators but also gathers SMART (Self-Monitoring, Analysis, and Reporting Technology) data for each disk, providing valuable insights into their health and potential failure points.
+**Скрипт для сбора метрик производительности дисков и серверов** — это комплексный инструмент, предназначенный для сбора и мониторинга метрик производительности жестких дисков в режиме реального времени. Этот скрипт собирает ключевые показатели производительности на уровне жесткого диска и сервера, а также SMART (Self-Monitoring, Analysis, and Reporting Technology), предоставляя ценные сведения о состоянии дисков.
 
-The metrics are categorized into three main levels:
-1. **S.M.A.R.T. Attributes**: Collects various SMART attributes to monitor disk health.
-2. **Disk-Level Performance Metrics**: Focuses on individual disk operations like I/O activities, queue sizes, throughput, and operational statuses.
-3. **Server-Level Performance Metrics**: Captures system-wide performance indicators, including CPU, memory usage, network traffic, and disk utilization.
+Метрики классифицируются на три основных уровня:
+1. **Атрибуты S.M.A.R.T.**: Сбор атрибутов SMART для мониторинга состояния диска.
+2. **Метрики производительности на уровне диска**: Ориентированы на операции отдельных дисков, такие как I/O активность, размеры очередей, пропускная способность и рабочие статусы.
+3. **Метрики производительности на уровне сервера**: Фиксируют показатели производительности всей системы, включая использование процессора, памяти, сетевого трафика и загрузки дисков.
 
-## S.M.A.R.T. Attributes
+## Атрибуты S.M.A.R.T.
 
-The script gathers the following SMART attributes, which are crucial for assessing disk health:
+Скрипт собирает следующие атрибуты SMART, которые важны для оценки состояния дисков:
 
-| SMART ID | Attribute Name                       |
+| SMART ID | Наименование атрибута               |
 |----------|-------------------------------------|
 | 1        | Read_Error_Rate                     |
 | 3        | Spin-Up_Time                        |
@@ -24,54 +24,57 @@ The script gathers the following SMART attributes, which are crucial for assessi
 | 10       | Spin_Retry_Count                    |
 | 12       | Power_Cycle_Count                   |
 | 187      | Reported_UNC_Errors                 |
-| 188      | Command_Timeout                      |
+| 188      | Command_Timeout                     |
 | 191      | G-sense_error_rate                  |
 | 192      | Power-off_Retract_Count             |
 | 193      | Load/Unload_Cycle_Count             |
-| 194      | Temperature_Celsius                  |
+| 194      | Temperature_Celsius                 |
 | 198      | Uncorrectable_Sector_Count          |
 | 199      | UltraDMA_CRC_Error_Count            |
 
-These attributes provide essential insights into potential disk failures, performance degradation, and overall reliability. Monitoring these values can help preemptively identify issues before they result in data loss or disk failures.
+Эти атрибуты предоставляют важные данные о возможных отказах дисков, снижении производительности и общей надежности. Мониторинг этих значений помогает заранее выявлять проблемы до того, как они приведут к потере данных или выходу диска из строя.
 
-## Disk-Level Metrics
+## Метрики на уровне диска
 
-Disk-level metrics provide insights into the health, workload, and throughput of each disk in the server. Key metrics collected include:
+Метрики на уровне диска дают представление о состоянии, нагрузке и пропускной способности каждого диска в сервере. Ключевые собираемые метрики включают:
 
-- **DiskStatus**: Reflects the current disk status (e.g., healthy, busy, error).
-- **IOQueueSize**: The number of I/O requests in the queue. High values may indicate heavy load.
-- **ReadSuccess_Throughput**: Disk read throughput, measured in KB/s.
-- **ReadWorkItem_QueueTime**: Average queue time for read requests, in ms.
-- **ReadWorkItem_SuccessQps**: Number of successful read operations per second.
-- **ReadWorkItem_ProcessTime**: Execution time for read operations, measured via `r_await`.
-- **Background_Checksum_ReadFailQps**: Rate of failed integrity checks (e.g., SMART attributes 1, 7, 198).
-- **TempFile_WriteWorkItem_SuccessQps**: Successful write operations for temporary files per second.
-- **TempFile_WriteSuccess_Throughput**: Write throughput for temporary files.
-- **NormalFile_WriteWorkItem_SuccessQps**: Successful writes for normal files.
-- **NormalFile_WriteWorkItem_QueueTime**: Queue time for write operations on normal files.
-- **NormalFile_WriteSuccess_Throughput**: Write throughput for normal files.
+- **DiskStatus**: Отражает текущий статус диска (например, исправен, занят, ошибка).
+- **IOQueueSize**: Количество запросов ввода/вывода в очереди.
+- **ReadSuccess_Throughput**: Пропускная способность чтения (КБ/с).
+- **ReadWorkItem_QueueTime**: Время ожидания запросов на чтение (мс).
+- **ReadWorkItem_SuccessQps**: Число успешных операций чтения в секунду (запросов/сек).
+- **NormalFile_WriteWorkItem_SuccessQps**: Число успешных операций записи обычных файлов в секунду (запросов/сек).
+- **NormalFile_WriteWorkItem_QueueTime**: Время ожидания запросов на запись обычных файлов (мс).
+- **NormalFile_WriteSuccess_Throughput**: Пропускная способность записи обычных файлов (КБ/с).
 
-## Server-Level Metrics
+## Метрики на уровне сервера
 
-These metrics provide a higher-level view of the entire server’s performance, identifying system-wide impacts on disk longevity and stability:
+Эти метрики предоставляют более высокоуровневый обзор производительности всего сервера, выявляя системные воздействия на долговечность и стабильность дисков:
 
-- **disk_util**: Max and average disk utilization percentages, indicating disk load and potential wear.
-- **tcp_segs_stat (tcp_outsegs)**: Number of TCP segments sent, highlighting network operations impacting the disk.
-- **page_activity (page_in/page_out)**: Page activity indicating memory swap activity, impacting disk usage.
-- **disk_summary (total_disk_read/total_disk_write)**: Overall data read and written to disks, helping to track wear levels.
-- **memory_summary (mem_res)**: Reserved memory usage, with high swap reliance indicating increased disk activity.
-- **cpu_summary (cpu_kernel)**: Kernel mode CPU load, which can indicate I/O processing demands on the CPU.
-- **udp_stat (udp_outdatagrams/udp_indatagrams)**: UDP datagrams sent/received, which can correlate with disk write/read operations.
-- **net_pps_summary (net_pps_receive/net_pps_transmit)**: Packets received/transmitted per second, highlighting network load on disk.
-- **net_summary (receive_speed)**: Network data receive speed, indicating potential large data writes to disk.
-- **tcp_currestab**: Active TCP connections, with many connections often indicating high disk access demand.
+- **disk_util**: Максимальный и средний процент загрузки диска, указывающий на нагрузку и потенциальный износ.
+- **tcp_segs_stat (tcp_outsegs)**: Количество отправленных сегментов TCP, указывающее на сетевые операции, влияющие на диск.
+- **page_activity (page_in/page_out)**: Активность страниц, указывающая на использование свопа памяти, влияющего на диск.
+- **disk_summary (total_disk_read/total_disk_write)**: Общий объем данных, прочитанных и записанных на диски, помогает отслеживать уровни износа.
+- **memory_summary (mem_res)**: Использование зарезервированной памяти, при высокой зависимости от свопа указывает на повышенную активность диска.
+- **cpu_summary (cpu_kernel)**: Нагрузка на процессор в режиме ядра, которая может указывать на потребности ввода/вывода на процессор.
+- **udp_stat (udp_outdatagrams/udp_indatagrams)**: Отправленные/полученные дейтаграммы UDP, которые могут коррелировать с операциями записи/чтения на диск.
+- **net_pps_summary (net_pps_receive/net_pps_transmit)**: Пакеты, полученные/отправленные в секунду, указывающие на сетевую нагрузку на диск.
+- **net_summary (receive_speed)**: Скорость приема данных по сети, указывающая на возможные большие объемы записи на диск.
+- **tcp_currestab**: Активные TCP-соединения, при высоком числе которых часто указывается высокий спрос на доступ к диску.
 
-## Usage
+## Использование
 
-To start the script:
+Для запуска скрипта на Linux:
 
-1. Clone or download this repository.
-2. Install any required dependencies (if applicable).
-3. Run the script using:
+1. Клонируйте или загрузите этот репозиторий:
    ```bash
-   python disk_metrics.py
+   git clone https://ai-gitlab.npobaum.ru/aib-projects/aib-products/baum-ai-diskfailure-predict/baum-ai-diskfailure-predict-ds.git
+2. Установите необходимые зависимости:
+   ```bash
+   pip install requirements.txt
+3. Установите системные утилиты (smartctl, iostat, netstat, vmstat, mpstat, ifstat, free), если они не установлены:
+   ```bash
+   sudo apt-get install smartmontools sysstat net-tools ifstat
+3. Запустите скрипт с помощью:
+   ```bash
+   python3 collect_disk_metrics_linux.py
