@@ -1,4 +1,4 @@
-# README
+# Baum AI DiskFailure Predict DS
 
 ## Обзор
 
@@ -69,12 +69,39 @@
 1. Клонируйте или загрузите этот репозиторий:
    ```bash
    git clone https://ai-gitlab.npobaum.ru/aib-projects/aib-products/baum-ai-diskfailure-predict/baum-ai-diskfailure-predict-ds.git
-2. Установите необходимые зависимости:
+2. Перейдите в созданную директорию:
+   ```bash
+   cd baum-ai-diskfailure-predict-ds
+3. Установите необходимые зависимости:
    ```bash
    pip install requirements.txt
-3. Установите системные утилиты (smartctl, iostat, netstat, vmstat, mpstat, ifstat, free), если они не установлены:
+4. Установите системные утилиты (smartctl, iostat, netstat, vmstat, mpstat, ifstat, free), если они не установлены:
    ```bash
    sudo apt-get install smartmontools sysstat net-tools ifstat
-3. Запустите скрипт с помощью:
+5. Запустите скрипт с помощью:
    ```bash
    python3 collect_disk_metrics_linux.py
+
+Для запуска скрипта на регулярной основе с помощью crontab:
+
+1. Сделайте Python-скрипт исполняемым, добавив права на исполнение:
+   ```bash
+   chmod +x collect_disk_metrics_linux.py
+2. Откройте файл crontab для редактирования:
+   ```bash
+   sudo crontab -e
+3. Скопируйте и вставьте следующие строки в файл crontab (проверьте ваш путь до скрипта):
+   ```bash
+   SHELL=/bin/bash
+   PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+   # Запуск collect_disk_metrics.py каждый час
+   0 * * * * /usr/bin/python3/home/user/baum-ai-diskfailure-predict-ds/scripts/collect_disk_metrics_linux.py
+4. Чтобы проверить состояние cron и убедиться в его запуске, выполните:
+   ```bash
+   sudo systemctl status cron
+
+#### Примечание:
+```0 * * * *``` — скрипт запускается каждую нулевую минуту каждого часа.
+```/usr/bin/python3``` — полный путь к интерпретатору Python 3 (узнать путь можно командой which python3).
+```/home/user/baum-ai-diskfailure-predict-ds/scripts/collect_disk_metrics_linux.py``` — путь к скрипту, который может быть изменен в зависимости от его расположения на сервере.
